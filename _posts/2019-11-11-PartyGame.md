@@ -4,7 +4,9 @@ title: Introduction
 tag: Multiplayer browser game for smartphones
 ---
 
-In this tutorial I will teach you how to use html and js to create a online multiplayer game that can be played on smartphones. The game also features a shared screen that can be opened on a pc or tablet browser. The end result will be similar to the way jackbox games do their networking. Doing everything in the browser has a huge advantage for these kind of games because you can do everything in the same codebase.
+In this tutorial I will teach you how to use html and js to create a online multiplayer game that can be played on smartphones. 
+
+The game also features a shared screen that can be opened on a pc or tablet browser. The end result will be similar to the way jackbox games do their networking. Doing everything in the browser has a huge advantage for these kind of games because you can do everything in the same codebase.
 
 The tutorial is divided into several sections:
 

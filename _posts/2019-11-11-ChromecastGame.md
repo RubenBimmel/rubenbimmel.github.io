@@ -4,7 +4,9 @@ title: Introduction
 tag: Chromecast game
 ---
 
-In this tutorial you will learn how to add chromecast support to a browser game. The game used in this tutorial is the game that was created in my other tutorial [Multiplayer browser game for smartphones]().
+In this tutorial you will learn how to add chromecast support to a browser game. 
+
+The game used in this tutorial is the game that was created in my other tutorial [Multiplayer browser game for smartphones]().
 
 The tutorial is divided into several sections:
 1. Sender
