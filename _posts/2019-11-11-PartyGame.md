@@ -10,16 +10,15 @@ The game also features a shared screen that can be opened on a pc or tablet brow
 
 The tutorial is divided into several sections:
 
-1. Node.js
-2. Express
-3. Basic controller
-4. Basic receiver
-5. Socket.io
-6. Rooms
-7. Gamemanager
-8. Animations
-9. Controls
-10. UI
+1. Node.js and Express
+2. Basic controller
+3. Basic receiver
+4. Socket.io
+5. Rooms
+6. Gamemanager
+7. Animations
+8. Controls
+9. UI
 
 Each section builds on the content from the previous sections. You don't have to follow all of them. Every tutorial will start and end with a download link for the code so you can continue with the tutorial from any section.
 
@@ -29,4 +28,4 @@ Developing this game requires a code editor that supports html and js. It does n
 
 ### Next
 
-[Setting up a node.js server]()
+[Setting up a server using Node.js and Express]()
