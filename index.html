@@ -20,10 +20,12 @@ layout: default
 	{% endif %}
 {% endfor %}
 
+{% assign rposts = site.posts | reverse %}
+
 <div class="posts">
   {% for tag in tags %}
     <h1>{{ tag }}</h1>
-    {% for post in site.posts %}
+    {% for post in rposts %}
       {% if tag == post.tag %}
         <article class="post">
 
