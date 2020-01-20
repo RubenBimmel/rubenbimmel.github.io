@@ -31,4 +31,4 @@ Now it's time to add some JS to our html pages. Create a new folder inside the p
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/03-SocketIO)
 
-## Further readings
+## Learn more
