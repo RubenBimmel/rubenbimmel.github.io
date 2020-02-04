@@ -22,6 +22,12 @@ layout: default
 
 {% assign rposts = site.posts | reverse %}
 
+<div class="about">
+  <h3>Welcome to my tutorial blog</h3> 
+  My name is Ruben Bimmel. I am a game developer from the Netherlands and student at the <a href="www.hku.nl">HKU</a>. 
+  For my graduation project I created a multiplayer party game that can be played on a chromecast. On this blog you will find tutorials explaining how I created this game.  
+</div>
+
 <div class="posts">
   {% for tag in tags %}
     <h1>{{ tag }}</h1>
@@ -29,13 +35,17 @@ layout: default
       {% if tag == post.tag %}
         <article class="post">
 
-          <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
+          <a href="{{ site.baseurl }}{{ post.url }}"><img src="{{ post.img }}" class="post-img"/></a>
 
-          <div class="entry">
-            {{ post.excerpt }}
+          <div class="content">
+            <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ forloop.index }}. {{ post.title }}</a></h2>
+
+            <div class="entry">
+              {{ post.excerpt }}
+            </div>
+
+            <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
           </div>
-
-          <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
         </article>
       {% endif %}
     {% endfor %}

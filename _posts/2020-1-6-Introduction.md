@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Introduction
+img: images/placeholder2.png
 forward: NodeJS
 tag: Creating a multiplayer game like Jackbox
 ---
@@ -20,7 +21,7 @@ This tutorial mainly focuses on the technical steps of setting up a multiplayer 
 - a shared screen
 - a controller
 
-## Before we begin
+## What you need to know
 This tutorial is aimed at game developers that are new, or want to learn more, about developing games in HTML and JavaScript. To be able to follow this tutorial you should have some basic knowledge on the fundamentals of web development. If you are new to the following programming languages I recommend reading these tutorials:
 
 [HTML Basics - MDN web docs](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics)
