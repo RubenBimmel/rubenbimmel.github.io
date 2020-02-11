@@ -16,7 +16,7 @@ Unlike Jackbox games we won't develop this game for multiple platforms. Instead 
 
 ![End result]({{site.baseurl}}/images/placeholder.jpg)
 
-This tutorial mainly focuses on the technical steps of setting up a multiplayer game like this. The end result of this tutorial will be a simple tic tac toe game. The game consists of three different webpages:
+This tutorial mainly focuses on the technical steps of setting up a multiplayer game like this. The end result of this tutorial will be a simple rock paper scissors game. The game consists of three different webpages:
 - the lobby
 - a shared screen
 - a controller
