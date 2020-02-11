@@ -61,29 +61,42 @@ We can also log when a user disconnects from the server. To do this we need to l
 
 ## Sending messages to the server
 
-Now let's try sending messages from the client to the server. The controller page has an array of buttons that call a mark() function. Let us add this function to `controller.js` and log the results.
+Now let's try sending messages from the client to the server. We want the server to know what hand we chose in the controller. Let's start with rock. Add the following lines to `controller.js`.
 
 ```js
-function mark(position) {
-  console.log(position);
+const rockButton = document.getElementById("rock");
+
+rockButton.onclick = function() {
+    socket.emit('hand', "rock");
 }
 ```
 
-To send this value to the server we can simply add the following line of code to the function.
+Using the emit function we can send an event to the server. Now we can log this value on the server by listening to this event. Add the following lines of code to `index.js`.
 
 ```js
-  socket.emit('mark', position);
-```
-
-Now we can also log this value on the server by listening to this event. Add the following lines of code to `index.js`.
-
-```js
-  socket.on('mark', function(position) {
-    console.log(position);
+  socket.on('hand', function(hand) {
+    console.log(hand);
   });
 ```
 
-Now refresh the controller page and hit the buttons. If everything went right you can see the positions showing up inside your command line window.
+Now refresh the controller page and click on the rock button. If everything went right you should see the log inside your command line window.
+
+Let's do the same for the other buttons.
+
+```js
+const paperButton = document.getElementById("paper");
+const scissorsButton = document.getElementById("scissors");
+
+paperButton.onclick = function() {
+    socket.emit('hand', "paper");
+}
+
+scissorsButton.onclick = function() {
+    socket.emit('hand', "scissors");
+}
+```
+
+We are emiting the values to the same even so you don't have to make any changes to `index.js`.
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/03-SocketIO)
 
