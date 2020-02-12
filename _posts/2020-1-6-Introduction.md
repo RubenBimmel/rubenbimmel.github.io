@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Introduction
-img: images/placeholder2.png
+img: images/introduction.png
 forward: NodeJS
 tag: Creating a multiplayer game like Jackbox
 ---
@@ -14,7 +14,7 @@ Unlike Jackbox games we won't develop this game for multiple platforms. Instead 
 
 ## Our goal
 
-![End result]({{site.baseurl}}/images/placeholder.jpg)
+![End result]({{site.baseurl}}/images/preview.png)
 
 This tutorial mainly focuses on the technical steps of setting up a multiplayer game like this. The end result of this tutorial will be a simple rock paper scissors game. The game consists of three different webpages:
 - the lobby

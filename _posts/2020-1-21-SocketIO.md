@@ -34,7 +34,7 @@ io.on('connection', function(socket){
 });
 ```
 
-Now it's time to add some JS to our html pages. Create a new folder inside the public folder and name it `js`. Create a new file inside that folder and name it `controller.js`. 
+Now it's time to add some JS to our html pages. Create a new folder inside the public folder and name it `js`. Create a new file inside that folder and name it `game.js`. this will be the script that runs in `game.html`, the shared screen of our game.
 
 Add the following line to implement SocketIO on the client side.
 
@@ -42,14 +42,14 @@ Add the following line to implement SocketIO on the client side.
 var socket = io();
 ```
 
-We need to add this script to the client page. Add the following lines to `controller.html`.
+We need to add this script to the client page. Add the following lines to `game.html`. It is important that the socketIO script is added in the header.
 
 ```html
 <script src="/socket.io/socket.io.js"></script>
-<script src="js/controller.js"></script>
+<script src="js/game.js"></script>
 ```
 
-Now go to <a href="http://localhost:3000/controller" target="_blank">http://localhost:3000/controller</a>. If everything went right we should see no errors in the console. Inside your command line window you should see the log `a user connected` appear every time you load the page.
+Now go to <a href="http://localhost:3000/game" target="_blank">http://localhost:3000/game</a>. If everything went right we should see no errors in the console. Inside your command line window you should see the log `a user connected` appear every time you load the page.
 
 We can also log when a user disconnects from the server. To do this we need to listen to the disconnect event for each connection. We can start listening to these events by adding the following lines to `index.js`. After that both connection and disconnect events should be logged in the command line window.
 
@@ -59,55 +59,57 @@ We can also log when a user disconnects from the server. To do this we need to l
   });
 ```
 
-## Sending messages to the server
+Let's also add socketIO to `controller.html`. Inside the `js` folder create a new file named `controller.js` and add the following lines of code to `controller.html`.
 
-Now let's try sending messages from the client to the server. We want the server to know what hand we chose in the controller. Let's start with rock. Add the following lines to `controller.js`.
-
-```js
-const rockButton = document.getElementById("rock");
-
-rockButton.onclick = function() {
-    socket.emit('hand', "rock");
-}
+```html
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/controller.js"></script>
 ```
 
-Using the emit function we can send an event to the server. Now we can log this value on the server by listening to this event. Add the following lines of code to `index.js`.
+Let's also start a socket connection inside `controller.js`.
 
 ```js
-  socket.on('hand', function(hand) {
-    console.log(hand);
+var socket = io();
+```
+
+## Sending messages to the server
+
+We now have communication on both the controller and the shared screen of our game. The shared screen is going to host new games. The controller is going to join a game as a player. We want the server to know wheter a connected user is a host or a controller.
+
+Let's start by sending a message from the game screen to the server. Add the following code to `game.js`.
+
+```js
+socket.emit('host');
+```
+
+Using the emit function we can send an event to the server. We can than respond on the server by adding this code to `index.js`.
+
+```js
+  socket.on('host', function() {
+    socket.emit('room', "1234");
   });
 ```
 
-Now refresh the controller page and click on the rock button. If everything went right you should see the log inside your command line window.
-
-Let's do the same for the other buttons.
+We are responding to the client with a new event. We can read the data from this event in the client. Let's add some code to `game.js` so that we can display the room number.
 
 ```js
-const paperButton = document.getElementById("paper");
-const scissorsButton = document.getElementById("scissors");
-
-paperButton.onclick = function() {
-    socket.emit('hand', "paper");
-}
-
-scissorsButton.onclick = function() {
-    socket.emit('hand', "scissors");
-}
+socket.on('room', function(id) {
+    document.getElementById("room").innerText = id;
+});
 ```
 
-We are emiting the values to the same even so you don't have to make any changes to `index.js`.
+Now if we go to <a href="http://localhost:3000/game" target="_blank">http://localhost:3000/game</a> we should see our new room number appear in the top left corner.
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/03-SocketIO)
 
 ## Learn more about Socket.IO
 
-We now have a websocket connection between the server and the client. In the upcomming parts we will create our game. We will use SocketIO a few more times during this project.
+We now have a websocket connection between the server and the clients. In the upcomming parts we will create our game and use more complex functions of socketIO.
 
 If you want to learn more about SocketIO on your own you can start by reading the docs here:
 
 [SocketIO - docs](https://socket.io/docs/)
 
-Also from here you can check out this great tutorial for a multiplayer game using SocketIO. It uses the same setup as we have done now. This tutorial explains how to use SocketIO to create a 2D game with player movement.
+Also from here you can check out this great tutorial for a multiplayer game using SocketIO. It uses a similar setup as we have done now. This tutorial explains how to use SocketIO to create a 2D game with player movement.
 
 [Simple multiplayer game with SocketIO](https://medium.com/@projectyang/simple-multiplayer-game-with-socket-io-tutorial-part-one-setup-and-movement-ee202024f0ef)
