@@ -13,16 +13,22 @@ So far we added two modules to our Node server, Express and SocketIO. In this pa
 
 Our gamemanager will keep a list of all active rooms. Every action a player does will be computed by the server. When the state of the game changes it will send the new state to all players in the room.
 
+This tutorial continues with the code from the previous part. You can get the finished project from the last part [here](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/03-SocketIO).
+
 ## Creating a gamemanager module
 
 Create a new script inside your projects root folder and call it `gamemanager.js`. Inside this script we are going to write a simple game class. Add the following lines of code to `gamemanager.js`.
 
 ```js
 class Game {
-    constructor(id, host) {
+    constructor(id) {
         this.id = id;
-        this.host = host;
         this.players = [];
+    }
+
+    addHost(socket) {
+        this.host = socket.id;
+        socket.emit('room', this.id);
     }
 }
 ```
@@ -62,7 +68,7 @@ Now we can create a new room. Go to `index.js` and replace the host function wit
 ```js
 socket.on('host', function() {
     var game = gamemanager.createRoom(socket.id);
-    socket.emit('room', game.id);
+    game.addHost(socket);
 });
 ```
 
@@ -71,7 +77,7 @@ Now if we go to <a href="http://localhost:3000/game" target="_blank">http://loca
 So we are now able to create new games. Let's also create a function to remove a game. Add this function to `gamemanager.js`.
 
 ```js
-function removeGame(id) {
+function removeRoom(id) {
     delete games[id];
 }
 ```
@@ -81,7 +87,7 @@ We also need to add this function to the exports object.
 ```js
 module.exports = {
     createRoom: createRoom,
-    removeGame: removeGame
+    removeRoom: removeRoom
 }
 ```
 
@@ -90,8 +96,8 @@ We want the game to stop when the connection with the host is lost. Add the foll
 ```js
 socket.on('host', function() {
     var game = gamemanager.createRoom(socket.id);
-    socket.emit('room', game.id);
-    socket.on('disconnect', () => gamemanager.removeGame(game.id));
+    game.addHost(socket);
+    socket.on('disconnect', () => gamemanager.removeRoom(game.id));
 });
 ```
 
