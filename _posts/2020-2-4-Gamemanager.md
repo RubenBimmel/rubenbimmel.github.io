@@ -102,5 +102,3 @@ socket.on('host', function() {
 ```
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/04-Gamemanager)
-
-## Learn more about Node modules
