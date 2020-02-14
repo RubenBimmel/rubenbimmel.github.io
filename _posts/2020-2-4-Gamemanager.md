@@ -30,6 +30,14 @@ class Game {
         this.host = socket.id;
         socket.emit('room', this.id);
     }
+
+    addPlayer(socket, name) {
+        var player = {
+            id: socket.id,
+            name: name
+        };
+        this.players.push (player);
+    }
 }
 ```
 
