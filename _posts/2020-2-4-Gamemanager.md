@@ -24,8 +24,18 @@ Create a new script inside your projects root folder and call it `gamemanager.js
         <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">players</span> <span class="o">=</span> <span class="p">[];</span>
     <span class="p">}</span>
+<span class="p">}</span></span>
+</code></pre></div></div>
 
-    <span class="nx">addHost</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+This class will be able to keep track of the game state on the server. Let's add two functions to this class that allows us to add a host and players to the game. We want the gamemanager to know what sockets are connected to a game so that we can send messages to them from within the game class.
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Game</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">players</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">}</span>
+
+    <span class="new"><span class="nx">addHost</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">host</span> <span class="o">=</span> <span class="nx">socket</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">room</span><span class="dl">'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
     <span class="p">}</span>
@@ -36,11 +46,11 @@ Create a new script inside your projects root folder and call it `gamemanager.js
             <span class="na">name</span><span class="p">:</span> <span class="nx">name</span>
         <span class="p">};</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">players</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nx">player</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span></span>
+    <span class="p">}</span></span>
+<span class="p">}</span>
 </code></pre></div></div>
 
-We can now easily create multiple games on the server. Let's add two functions to `gamemanager.js`. One to create a new room and one to join a room. For the room id we will generate a number between 0000 and 9999 and make sure it does not exist yet.
+We can now easily create multiple games on the server. Let's add another function to `gamemanager.js` outside the game class to create a new room. For the room id we will generate a number between 0000 and 9999 and make sure it does not exist yet.
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="new"><span class="kd">var</span> <span class="nx">games</span> <span class="o">=</span> <span class="p">{};</span>
 
@@ -55,6 +65,16 @@ We can now easily create multiple games on the server. Let's add two functions t
 <span class="p">}</span></span>
 </code></pre></div></div>
 
+<div class="fold-out" onclick="this.classList.toggle('open')">
+<div class="fold-out-title">Why are we using var games = {} ?</div>
+<div class="fold-out-content">We create a games object to store all of our active games. By storing them in an object instead of an array we can add them using the id string as key. We could loop over these games by using Objec.values(games).</div>
+</div>
+
+<div class="fold-out" onclick="this.classList.toggle('open')">
+<div class="fold-out-title">How is this room id generated?</div>
+<div class="fold-out-content">To generate the room id we use the Math.random() function. It generates a number between 0 and 1. By multiplying it by 10000 and using the Math.floor() function we generate a whole number between 0 and 9999. <br/><br/>We want to add 0 to the left side of the number so that there are always four digits. To do this we can add four 0s before the number and take the last 4 numbers of the result. For example 42 becomes 000042 and then the last four digits are 0042.</div>
+</div>
+
 Let's add our module to the server. Add the following line to `index.js`.
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">io</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">socket.io</span><span class="dl">'</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
@@ -63,7 +83,7 @@ Let's add our module to the server. Add the following line to `index.js`.
 <span class="kd">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">;</span>
 </code></pre></div></div>
 
-We now have a gamemanager on the server. However we can not use it yet. We need to define what the gamemanager object is going to be. We can do this using the modules.exports function. Add the following lines of code to `gamemanager.js`.
+We now have a gamemanager on the server. However we can not use it yet. We need to define what the gamemanager object is going to be. We can do this using the `modules.exports` function. Add the following lines of code to `gamemanager.js`.
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="new"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">createRoom</span><span class="p">:</span> <span class="nx">createRoom</span>
@@ -116,5 +136,10 @@ We want the game to stop when the connection with the host is lost. Add the foll
   <span class="p">});</span>
 <span class="p">});</span>
 </code></pre></div></div>
+
+<div class="fold-out" onclick="this.classList.toggle('open')">
+<div class="fold-out-title">Why are we adding this listener inside the host listener?</div>
+<div class="fold-out-content">By adding this listener inside the host listener this function will only listen to disconnections on hosts. This reduces the amount of listeners added to sockets. Adding to many listeners can result in performance issues.</div>
+</div>
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/04-Gamemanager)
