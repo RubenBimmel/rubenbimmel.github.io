@@ -19,94 +19,102 @@ This tutorial continues with the code from the previous part. You can get the fi
 
 Create a new script inside your projects root folder and call it `gamemanager.js`. Inside this script we are going to write a simple game class. Add the following lines of code to `gamemanager.js`.
 
-```js
-class Game {
-    constructor(id) {
-        this.id = id;
-        this.players = [];
-    }
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="new"><span class="kd">class</span> <span class="nx">Game</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">players</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">}</span>
 
-    addHost(socket) {
-        this.host = socket.id;
-        socket.emit('room', this.id);
-    }
+    <span class="nx">addHost</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">host</span> <span class="o">=</span> <span class="nx">socket</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">room</span><span class="dl">'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    addPlayer(socket, name) {
-        var player = {
-            id: socket.id,
-            name: name
-        };
-        this.players.push (player);
-    }
-}
-```
+    <span class="nx">addPlayer</span><span class="p">(</span><span class="nx">socket</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">player</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="na">id</span><span class="p">:</span> <span class="nx">socket</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="nx">name</span>
+        <span class="p">};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">players</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nx">player</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></span>
+</code></pre></div></div>
 
 We can now easily create multiple games on the server. Let's add two functions to `gamemanager.js`. One to create a new room and one to join a room. For the room id we will generate a number between 0000 and 9999 and make sure it does not exist yet.
 
-```js
-var games = {};
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="new"><span class="kd">var</span> <span class="nx">games</span> <span class="o">=</span> <span class="p">{};</span>
 
-function createRoom() {
-    var id;
-    do { 
-        id = `0000${Math.floor(Math.random() * 10000)}`.slice(-4);
-    } while (games[id] != undefined);
+<span class="kd">function</span> <span class="nx">createRoom</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">id</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span> 
+        <span class="nx">id</span> <span class="o">=</span> <span class="s2">`0000</span><span class="p">${</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10000</span><span class="p">)}</span><span class="s2">`</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nx">games</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">);</span>
     
-    games[id] = new Game(id);
-    return games[id];
-}
-```
+    <span class="nx">games</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Game</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">games</span><span class="p">[</span><span class="nx">id</span><span class="p">];</span>
+<span class="p">}</span></span>
+</code></pre></div></div>
 
 Let's add our module to the server. Add the following line to `index.js`.
 
-```js
-var gamemanager = require('./gamemanager.js');
-```
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">io</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">socket.io</span><span class="dl">'</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
+<span class="new"><span class="kd">var</span> <span class="nx">gamemanager</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./gamemanager.js</span><span class="dl">'</span><span class="p">);</span></span>
+
+<span class="kd">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">;</span>
+</code></pre></div></div>
 
 We now have a gamemanager on the server. However we can not use it yet. We need to define what the gamemanager object is going to be. We can do this using the modules.exports function. Add the following lines of code to `gamemanager.js`.
 
-```js
-module.exports = {
-    createRoom: createRoom
-}
-```
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="new"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">createRoom</span><span class="p">:</span> <span class="nx">createRoom</span>
+<span class="p">}</span></span>
+</code></pre></div></div>
 
 Now we can create a new room. Go to `index.js` and replace the host function with the following code:
 
-```js
-socket.on('host', function() {
-    var game = gamemanager.createRoom(socket.id);
-    game.addHost(socket);
-});
-```
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">io</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">connection</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">socket</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">a user connected</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">disconnect</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">user disconnected</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">host</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="new"><span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="nx">gamemanager</span><span class="p">.</span><span class="nx">createRoom</span><span class="p">(</span><span class="nx">socket</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="nx">game</span><span class="p">.</span><span class="nx">addHost</span><span class="p">(</span><span class="nx">socket</span><span class="p">);</span></span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
 
 Now if we go to <a href="http://localhost:3000/game" target="_blank">http://localhost:3000/game</a> we should see a new room id appear every time we refresh the page.
 
+![Room number]({{site.baseurl}}/images/room9548.png)
+
+## Removing rooms
+
 So we are now able to create new games. Let's also create a function to remove a game. Add this function to `gamemanager.js`.
 
-```js
-function removeRoom(id) {
-    delete games[id];
-}
-```
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="new"><span class="kd">function</span> <span class="nx">removeRoom</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">delete</span> <span class="nx">games</span><span class="p">[</span><span class="nx">id</span><span class="p">];</span>
+<span class="p">}</span></span>
+</code></pre></div></div>
 
 We also need to add this function to the exports object.
 
-```js
-module.exports = {
-    createRoom: createRoom,
-    removeRoom: removeRoom
-}
-```
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">createRoom</span><span class="p">:</span> <span class="nx">createRoom</span><span class="new"><span class="p">,</span>
+    <span class="na">removeRoom</span><span class="p">:</span> <span class="nx">removeRoom</span></span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 We want the game to stop when the connection with the host is lost. Add the following lines of code to the host event in `index.js`.
 
-```js
-socket.on('host', function() {
-    var game = gamemanager.createRoom(socket.id);
-    game.addHost(socket);
-    socket.on('disconnect', () => gamemanager.removeRoom(game.id));
-});
-```
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">host</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="nx">gamemanager</span><span class="p">.</span><span class="nx">createRoom</span><span class="p">(</span><span class="nx">socket</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="nx">game</span><span class="p">.</span><span class="nx">addHost</span><span class="p">(</span><span class="nx">socket</span><span class="p">);</span>
+    <span class="new"><span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">disconnect</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">gamemanager</span><span class="p">.</span><span class="nx">removeRoom</span><span class="p">(</span><span class="nx">game</span><span class="p">.</span><span class="nx">id</span><span class="p">));</span></span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/04-Gamemanager)
