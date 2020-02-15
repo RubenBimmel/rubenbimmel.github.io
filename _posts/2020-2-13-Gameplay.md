@@ -283,3 +283,9 @@ Finally add the last bit of code to `game.js`.
 ![Winner]({{site.baseurl}}/images/winner.png)
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/07-Gameplay)
+
+## Wrapping up
+
+That's it for this tutorial We created a simple multiplayer game with a shared screen. The game is very simple and there is some room for improvement. The important thing is that we have learned the basics of setting up a server for a game like this.
+
+Thank you for reading! If you have any questions you can leave them in the comments below or mail me at <a href="mailto:contact@rubenbimmel.nl">contact@rubenbimmel.nl</a>.
