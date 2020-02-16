@@ -13,7 +13,7 @@ So far we added two modules to our Node server, Express and SocketIO. In this pa
 
 Our gamemanager will keep a list of all active rooms. Every action a player does will be computed by the server. When the state of the game changes it will send the new state to all players in the room.
 
-<span class="note">This tutorial continues with the code from the previous part. You can get the finished project from the last part [here](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/03-SocketIO).</note>
+<span class="note">This tutorial continues with the code from the previous part. You can get the finished project from the last part [here](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/03-SocketIO).</span>
 
 ## Creating a gamemanager module
 
