@@ -27,7 +27,7 @@ Create a new script inside your projects root folder and call it `gamemanager.js
 <span class="p">}</span></span>
 </code></pre></div></div>
 
-This class will be able to keep track of the game state on the server. Let's add two functions to this class that allows us to add a host and players to the game. We want the gamemanager to know what sockets are connected to a game so that we can send messages to them from within the game class.
+This class will be able to keep track of the game state on the server. Let's add two functions to this class that allows us to add a host and players to the game. We want the gamemanager to know what sockets are connected to a game so that later we can send messages to them from within the game class.
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Game</span> <span class="p">{</span>
     <span class="kd">constructor</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
@@ -90,7 +90,7 @@ We now have a gamemanager on the server. However we can not use it yet. We need 
 <span class="p">}</span></span>
 </code></pre></div></div>
 
-Now we can create a new room. Go to `index.js` and replace the host function with the following code:
+Now we can use our gamemanager to create a new room. Go to `index.js` and replace the host function with the following code:
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">io</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">connection</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">socket</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">a user connected</span><span class="dl">'</span><span class="p">);</span>
@@ -127,7 +127,7 @@ We also need to add this function to the exports object.
 <span class="p">}</span>
 </code></pre></div></div>
 
-We want the game to stop when the connection with the host is lost. Add the following lines of code to the host event in `index.js`.
+We want the game to stop when the host loses connection. Add the following lines of code to the host event in `index.js`.
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">host</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="nx">gamemanager</span><span class="p">.</span><span class="nx">createRoom</span><span class="p">(</span><span class="nx">socket</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
@@ -139,7 +139,15 @@ We want the game to stop when the connection with the host is lost. Add the foll
 
 <div class="fold-out" onclick="this.classList.toggle('open')">
 <div class="fold-out-title">Why are we adding this listener inside the host listener?</div>
-<div class="fold-out-content">By adding this listener inside the host listener this function will only listen to disconnections on hosts. This reduces the amount of listeners added to sockets. Adding to many listeners can result in performance issues.</div>
+<div class="fold-out-content">By adding this listener inside the host listener this function will only listen to disconnection events on hosts. This reduces the amount of listeners added to sockets. Adding to many listeners can result in performance issues.</div>
 </div>
 
 [View code](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/04-Gamemanager)
+
+## Learn more about Node modules
+
+By using the modules.exports object we can easily create our own modules and add them to our server. If you would like to see more example of how to use modules I recommend reading this great and very complete blogpost:
+
+[>> stackabuse - how to use module.exports in nodeJS](https://stackabuse.com/how-to-use-module-exports-in-node-js/)
+
+In the next part of this tutorial we will continue working on this module and improve our game class so that players can actually join our game.
