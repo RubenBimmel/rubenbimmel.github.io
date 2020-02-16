@@ -9,7 +9,7 @@ tag: Creating a multiplayer game like Jackbox
 
 The next step in this tutorial is to provide communication between the server and the clients. To do this we are going to use a module called SocketIO. 
 
-This is a very easy to use module that will allow us to use websockets. Websockets is a tool to communicate between a browser and a server. Sending messages is very fast wich makes it the perfect communication tool for creating multiplayer games in a browser. For now we will just do a basic implementation. This part will be similar to the [getting started](https://socket.io/get-started/chat/) tutorial from socketIO.
+This is a very easy to use module that will allow us to use websockets. Websockets are a tool to communicate between a client and a server. Sending messages through websockets is very fast wich makes it the perfect communication tool for creating multiplayer games in a browser. For now we will just do a basic implementation. This part will be similar to the [getting started](https://socket.io/get-started/chat/) tutorial from socketIO.
 
 This tutorial continues with the code from the previous part. You can get the finished project from the last part [here](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/02-Express).
 
@@ -20,7 +20,7 @@ Just like any other module we first need to install it inside our project. Run t
 c:\MultiplayerGame> npm install socket.io
 ```
 
-Now we first need to setup socketIO on our server. Add the following line of code to your `index.js` file to implement SocketIO on the server.
+Now we first need to set up socketIO on our server. Add the following line of code to your `index.js` file to implement SocketIO on the server.
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
 <span class="kd">const</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
@@ -44,7 +44,7 @@ Add the following line to implement SocketIO on the client side.
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="new"><span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">();</span></span>
 </code></pre></div></div>
 
-We need to add this script to the client page. Add the following lines to `game.html`. It is important that the socketIO script is added in the header.
+We need to add this script to the client page. Add the following lines to `game.html`. It is important to add the socketIO script in the head block.
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;title&gt;</span>Rock Paper Scissors<span class="nt">&lt;/title&gt;</span>
     <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"css/stylesheet.css"</span><span class="nt">&gt;</span>
@@ -72,6 +72,11 @@ We can also log when a user disconnects from the server. To do this we need to l
 <span class="p">});</span>
 </code></pre></div></div>
 
+<div class="fold-out" onclick="this.classList.toggle('open')">
+<div class="fold-out-title">Why are we adding this listener inside the connection event?</div>
+<div class="fold-out-content">The connection event is emitted on the global IO object. All other events are emitted on the sockets themselves. The connection event happens every time a user connects and a new websocket connection is created. This allows us to initialize the connection. By adding this listener inside the connection event we are adding it to all sockets that connect to the server.</div>
+</div>
+
 Let's also add socketIO to `controller.html`. Inside the `js` folder create a new file named `controller.js` and add the following lines of code to `controller.html`.
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;title&gt;</span>Rock Paper Scissors - Controller<span class="nt">&lt;/title&gt;</span>
@@ -94,7 +99,7 @@ Let's also start a socket connection inside `controller.js`.
 
 ## Sending messages to the server
 
-We now have communication on both the controller and the shared screen of our game. The shared screen is going to host new games. The controller is going to join a game as a player. We want the server to know wheter a connected user is a host or a controller.
+We now have communication on both the controller and the shared screen of our game. The shared screen is going to host new games. The controller is going to join a game as a player. We want the server to know whether a connected user is a host or a controller.
 
 Let's start by sending a message from the game screen to the server. Add the following code to `game.js`.
 
@@ -118,7 +123,7 @@ Using the emit function we can send an event to the server. We can than respond 
 <span class="p">});</span>
 </code></pre></div></div>
 
-We are responding to the client with a new event. We can read the data from this event in the client. Let's add some code to `game.js` so that we can display the room number.
+Now every time a socket sends a host event we immediately respond with a room event. We can read the data from this event in the client. Let's add some code to `game.js` so that we can display the room number.
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">host</span><span class="dl">'</span><span class="p">);</span>
 
@@ -135,7 +140,7 @@ Now if we go to <a href="http://localhost:3000/game" target="_blank">http://loca
 
 ## Learn more about Socket.IO
 
-We now have a websocket connection between the server and the clients. In the upcomming parts we will create our game and use more complex functions of socketIO.
+We now have a websocket connection between the server and the clients. In the upcoming parts we will create our game and use more complex functions of socketIO.
 
 If you want to learn more about SocketIO on your own you can start by reading the docs here:
 
