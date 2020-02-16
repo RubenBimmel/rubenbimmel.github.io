@@ -139,8 +139,8 @@ We now have a websocket connection between the server and the clients. In the up
 
 If you want to learn more about SocketIO on your own you can start by reading the docs here:
 
-[SocketIO - docs](https://socket.io/docs/)
+[>> SocketIO - docs](https://socket.io/docs/)
 
 Also from here you can check out this great tutorial for a multiplayer game using SocketIO. It uses a similar setup as we have done now. This tutorial explains how to use SocketIO to create a 2D game with player movement.
 
-[Simple multiplayer game with SocketIO](https://medium.com/@projectyang/simple-multiplayer-game-with-socket-io-tutorial-part-one-setup-and-movement-ee202024f0ef)
+[>> Simple multiplayer game with SocketIO](https://medium.com/@projectyang/simple-multiplayer-game-with-socket-io-tutorial-part-one-setup-and-movement-ee202024f0ef)
