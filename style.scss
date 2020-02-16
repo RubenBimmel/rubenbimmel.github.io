@@ -288,6 +288,15 @@ nav {
     font-size: 15px;
   }
 
+  .note {
+    color: #666;
+    font-style: italic;
+  }
+
+  .note a {
+    text-decoration: underline;
+  }
+
   .fold-out {
     background-color: lightgray;
     border: 1px solid #c0c0c0;

@@ -11,7 +11,7 @@ The next step in this tutorial is to provide communication between the server an
 
 This is a very easy to use module that will allow us to use websockets. Websockets are a tool to communicate between a client and a server. Sending messages through websockets is very fast wich makes it the perfect communication tool for creating multiplayer games in a browser. For now we will just do a basic implementation. This part will be similar to the [getting started](https://socket.io/get-started/chat/) tutorial from socketIO.
 
-This tutorial continues with the code from the previous part. You can get the finished project from the last part [here](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/02-Express).
+<span class="note">This tutorial continues with the code from the previous part. You can get the finished project from the last part [here](https://github.com/RubenBimmel/MultiplayerGameTutorial/tree/master/02-Express).</span>
 
 ## Adding websocket communication
 Just like any other module we first need to install it inside our project. Run the following command inside your project folder
