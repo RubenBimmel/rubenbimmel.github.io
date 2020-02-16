@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Gamemanager
+title: The game manager
 img: images/gamemanager.png
 forward: Rooms
 back: SocketIO
